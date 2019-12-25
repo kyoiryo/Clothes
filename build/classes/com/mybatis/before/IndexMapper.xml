@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.IndexDao">
+	<select id="selectNotice" resultType="Notice">
+		select * from noticetable order by ntime desc
+	</select>
+	<select id="getLastedClothes" resultType="Clothes" parameterType="Clothes">
+		select clothest.*, clothesy.typename from CLOTHESTABLE clothest,CLOTHESTYPE clothesy where clothest.clothestype_id = clothesy.id 
+		<if test="id != 0">
+			and clothesy.id = #{id} 
+		</if>
+		order by  clothest.id desc limit 15
+	</select>
+	<select id="selectClothesById"  resultType="Clothes" parameterType="Integer">
+		select clothest.*,clothesy.typename from clothestable clothest,clothestype clothesy where clothest.id=#{id} and clothest.clothestype_id = clothesy.id
+	</select>
+	<select id="search" resultType="Clothes" parameterType="String">
+		select clothest.*, clothesy.typename from CLOTHESTABLE clothest,CLOTHESTYPE clothesy where clothest.clothestype_id = clothesy.id 
+		and clothest.clothesname like concat('%',#{mykey},'%')
+	</select>
+	<select id="selectAllClothes"  resultType="Clothes">
+		select * from clothestable
+	</select>
+	
+</mapper>

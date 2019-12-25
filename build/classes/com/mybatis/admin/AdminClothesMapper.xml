@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.AdminClothesDao">
+	
+	<select id="selectClothes"  resultType="Clothes">
+		select * from clothestable
+	</select>
+	
+	<select id="selectAllClothesByPage"  resultType="Clothes" parameterType="map">
+		select * from clothestable order by id limit #{startIndex}, #{perPageSize}
+	</select>
+	
+	<insert id="addClothes" parameterType="Clothes">
+		insert into clothestable (id,clothesname,clothesoprice,clothesrprice,clothesstore,clothespicture,clothestype_id) 
+		values (null, #{clothesname}, #{clothesoprice}, #{clothesrprice}, #{clothesstore}, #{clothespicture}, #{clothestype_id})
+	</insert>
+	
+	<select id="selectClothesById"  resultType="Clothes" parameterType="Integer">
+		select clothest.*,clothesy.typename from clothestable clothest,clothestype clothesy where clothest.id=#{id} and clothest.clothestype_id = clothesy.id
+	</select>
+	
+	<delete id="deleteClothes"  parameterType="List">
+		delete from clothestable where id in
+		<foreach item="item" index="index" collection="list"
+		open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteAclothes" parameterType="Integer">
+		delete from clothestable where id=#{id}
+	</delete>
+	
+	<update id="updateClothesById" parameterType="Clothes">
+    update clothestable
+    <set>
+      <if test="clothesname != null">
+        clothesname = #{clothesname},
+      </if>
+      <if test="clothesoprice != null">
+        clothesoprice = #{clothesoprice},
+      </if>
+      <if test="clothesrprice != null">
+        clothesrprice = #{clothesrprice},
+      </if>
+      <if test="clothesstore != null">
+        clothesstore = #{clothesstore},
+      </if>
+      <if test="clothespicture != null">
+        clothespicture = #{clothespicture},
+      </if>
+      <if test="clothestype_id != null">
+        clothestype_id = #{clothestype_id},
+      </if>
+    </set>
+    	where id = #{id}
+  </update>
+  <select id="selectCartClothes" parameterType="Integer" resultType="map">
+  	select * from carttable where clothestable_id=#{id}
+  </select>
+  <select id="selectFocusClothes" parameterType="Integer" resultType="map">
+  	select * from focustable where clothestable_id=#{id}
+  </select>
+  <select id="selectOrderdetailClothes" parameterType="Integer" resultType="map">
+  	select * from orderdetail where clothestable_id=#{id}
+  </select>
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.AdminTypeDao">
+	<select id="selectClothesType"  resultType="ClothesType" >
+		select * from clothestype
+	</select>
+	<insert id="addType" parameterType="String">
+		insert into clothestype (id, typename) values (null, #{typename})
+	</insert>
+	<delete id="deleteType" parameterType="Integer">
+		delete from clothestype where id = #{id}
+	</delete>
+	<select id="selectClothesByType" resultType="Clothes" parameterType="Integer">
+		select * from clothestable where clothestype_id=#{id}
+	</select>
+</mapper>

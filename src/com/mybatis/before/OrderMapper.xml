@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.OrderDao">
+	<insert id="addOrder" parameterType="Order" keyProperty="id" useGeneratedKeys="true">
+		insert into orderbasetable (usertable_id, amount, status, orderdate,addresstable_id) values (#{usertable_id}, #{amount}, 0, now(),#{addresstable_id})
+	</insert>
+
+	<insert id="addOrderDetail" parameterType="map">
+		insert into ORDERDETAIL (orderbasetable_id, clothestable_id, SHOPPINGNUM) select #{ordersn}, clothestable_id, SHOPPINGNUM from CARTTABLE where usertable_id = #{uid} 
+	</insert>
+	<select id="selectClothesShop"  parameterType="Integer" resultType="map">
+		select shoppingnum clothesshoppingnum, clothestable_id clothesid from carttable where usertable_id=#{uid}
+	</select>
+
+	<update id="updateStore" parameterType="map">
+		update CLOTHESTABLE set CLOTHESSTORE=CLOTHESSTORE-#{clothesshoppingnum} where id=#{gid} 
+	</update>
+	
+	<delete id="clear" parameterType="Integer">
+		delete from carttable where usertable_id=#{uid} 
+	</delete>
+
+	<update id="pay" parameterType="Integer">
+		update orderbasetable set status=1 where id=#{ordersn}
+	</update>
+</mapper>

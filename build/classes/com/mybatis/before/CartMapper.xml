@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.CartDao">
+	<select id="isPutCart" parameterType="map" resultType="map">
+		select * from carttable where clothestable_id=#{gid}  and usertable_id=#{uid}
+	</select>
+	
+	<insert id="putCart" parameterType="map">             
+		insert into carttable(id, usertable_id,clothestable_id,shoppingnum) values (null, #{uid}, #{gid}, #{shoppingnum})
+	</insert>
+
+	<update id="updateCart" parameterType="map">
+		update carttable set shoppingnum=shoppingnum+#{shoppingnum} where usertable_id=#{uid} and clothestable_id=#{gid}
+	</update>
+
+	<select id="selectCart" parameterType="Integer" resultType="map">
+		select clothest.id, clothest.clothesname, clothest.clothespicture, clothest.clothesrprice, ct.shoppingnum, ct.shoppingnum*clothest.clothesrprice smallsum 
+		from CLOTHESTABLE clothest, CARTTABLE ct where clothest.id=ct.clothestable_id and ct.usertable_id=#{id}
+	</select>
+	<delete id="deleteAclothes" parameterType="map">
+		delete from carttable where usertable_id=#{uid} and clothestable_id=#{gid}
+	</delete>
+
+	<delete id="clear" parameterType="Integer">
+		delete from carttable where usertable_id=#{uid} 
+	</delete>
+</mapper>
